@@ -1,0 +1,1261 @@
+openapi: 3.0.3
+info:
+  title: "Online Shop API"
+  description: "Lab 5"
+  version: 1100.1223.34
+  
+servers:
+  - url: http://localhost:8000/api/
+tags:
+  - name: users
+  - name: order
+  - name: goods
+
+
+
+  
+paths:
+  /user:
+    post:
+      tags:
+        - users
+      summary: Create user
+      
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUser'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/getUser'
+    get:
+      tags:
+        - users
+      summary: Get all users
+      
+      operationId: getUser
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUser'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/getUser'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /user/login:
+    get:
+      tags:
+        - users
+      summary: Logs user into the system
+      operationId: loginUser
+      parameters:
+        - name: login
+          in: query
+          description: The login to sing in
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password to sign in
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            
+        '400':
+          description: Invalid username/password supplied
+        '404':
+          description: No page found
+  /user/{id}:
+    get:
+      tags:
+        - users
+      summary: Get user by id
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUser'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/getUser'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good:
+    get:
+      tags:
+        - goods
+      summary: get all goods
+      
+      operationId: getGood
+      
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGood'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetGood'
+        '400':
+          description: No goods in the shop
+
+  /good/1st_good:
+    post:
+      tags:
+        - goods
+      summary: add 1st good
+      operationId: postGood1
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_name
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: good_price
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_amount
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    get:
+      tags:
+        - goods
+      
+      operationId: getGood1
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+    put:
+      tags:
+        - goods
+      summary: update 1st good
+      operationId: putGood1
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - goods
+      summary: delete 1st good
+      operationId: deleteGood1
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '204':
+          description: Good was deleted.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good/2st_good:
+    post:
+      tags:
+        - goods
+      summary: add 2nd good
+      operationId: postGood2
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_name
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: good_price
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_amount
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    get:
+      tags:
+        - goods
+      
+      operationId: getGood2
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '403':
+          description: This good is reserved by another customer
+        '402':
+          description: This good is sold out
+    put:
+      tags:
+        - goods
+      summary: update 2nd good
+      operationId: putGood2
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - goods
+      summary: delete 2nd good
+      operationId: deleteGood2
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '204':
+          description: Good was deleted.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good/3rd_good:
+    post:
+      tags:
+        - goods
+      summary: add 3rd good
+      operationId: postGood3
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_name
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: good_price
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_amount
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    get:
+      tags:
+        - goods
+      
+      operationId: getGood3
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '403':
+          description: This good is reserved by another customer
+        '402':
+          description: This good is sold out
+    put:
+      tags:
+        - goods
+      summary: update 3rd good
+      operationId: putGood3
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - goods
+      summary: delete 3rd good
+      operationId: deleteGood3
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '204':
+          description: Good was deleted.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good/4th_good:
+    post:
+      tags:
+        - goods
+      summary: add 4th good
+      operationId: postGood4
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_name
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: good_price
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_amount
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    get:
+      tags:
+        - goods
+      
+      operationId: getGood4
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '403':
+          description: This good is reserved by another customer
+        '402':
+          description: This good is sold out
+    put:
+      tags:
+        - goods
+      summary: update 4th good
+      operationId: putGood4
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - goods
+      summary: delete 4th good
+      operationId: deleteGood4
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '204':
+          description: Good was deleted.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good/5th_good:
+    post:
+      tags:
+        - goods
+      summary: add 5th good
+      operationId: postGood5
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_name
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: good_price
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_amount
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    get:
+      tags:
+        - goods
+      
+      operationId: getGood5
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '403':
+          description: This good is reserved by another customer
+        '402':
+          description: This good is sold out
+    put:
+      tags:
+        - goods
+      summary: update 5th good
+      operationId: putGood5
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - goods
+      summary: delete 5th good
+      operationId: deleteGood5
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '204':
+          description: Good was deleted.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good/6th_good:
+    post:
+      tags:
+        - goods
+      summary: add 6th good
+      operationId: postGood6
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_name
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: good_price
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_amount
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    get:
+      tags:
+        - goods
+     
+      operationId: getGood6
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '403':
+          description: This good is reserved by another customer
+        '402':
+          description: This good is sold out
+    put:
+      tags:
+        - goods
+      summary: update 6th good
+      operationId: putGood6
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - goods
+      summary: delete 6th good
+      operationId: deleteGood6
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '204':
+          description: Good was deleted.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good/7th_good:
+    post:
+      tags:
+        - goods
+      summary: add 7th good
+      operationId: postGood7
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_name
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: good_price
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_amount
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    get:
+      tags:
+        - goods
+      
+      operationId: getGood7
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '403':
+          description: This good is reserved by another customer
+        '402':
+          description: This good is sold out
+    put:
+      tags:
+        - goods
+      summary: update 7th good
+      operationId: putGood7
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - goods
+      summary: delete 7th good
+      operationId: deleteGood7
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '204':
+          description: Good was deleted.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good/8th_good:
+    post:
+      tags:
+        - goods
+      summary: add 8th good
+      operationId: postGood8
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_name
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: good_price
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: good_amount
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    get:
+      tags:
+        - goods
+      
+      operationId: getGood8
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '403':
+          description: This good is reserved by another customer
+        '402':
+          description: This good is sold out
+    put:
+      tags:
+        - goods
+      summary: update 8th good
+      operationId: putGood8
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '401':
+          description: Authorization information is missing or invalid.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - goods
+      summary: delete 8th good
+      operationId: deleteGood8
+      parameters:
+        - name: good_id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Good'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Good'
+        '204':
+          description: Good was deleted.
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+          
+  /good/order:
+    post:
+      tags:
+        
+        - order
+        
+      
+      summary: buy a good
+      operationId: buyGood
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '403':
+          description: This good is reserved by another customer
+        '402':
+          description: This good is sold out or doesn`t exist
+        '401':
+          description: Unathorised user
+      security:
+        - user_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - order
+      summary: order is complete
+      
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Order'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 14379
+        first_name:
+          type: string
+          example: Stas
+        last_name:
+          type: string
+          example: Semenenko
+        username:
+          type: string
+          example: user12345
+        login:
+          type: string
+          example: nulp572
+        password:
+          type: string
+          format: password
+          example: asdasdadsd
+        
+      xml:
+        name: users
+        
+    Admin:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 14379
+        first_name:
+          type: string
+          example: Stas
+        last_name:
+          type: string
+          example: Semenenko
+        username:
+          type: string
+          example: user12345
+        login:
+          type: string
+          example: nulp572
+        password:
+          type: string
+          format: password
+          example: asdasdadsd
+        
+      xml:
+        name: users
+    getUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Stas
+        last_name:
+          type: string
+          example: Semenenko
+        username:
+          type: string
+          example: user12345
+        
+      xml:
+        name: users
+    Good:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 48751
+        name:
+          type: string
+          example: some good
+        price:
+          type: integer
+          format: int64
+          example: 48751
+        num_in_stock:
+          type: integer
+          format: int64
+          example: 12
+        is_reserved:
+          type: boolean
+          example: true
+    GetGood:
+      type: object
+      properties:
+        name:
+          type: string
+          example: some good
+        price:
+          type: integer
+          format: int64
+          example: 48751
+        num_in_stock:
+          type: integer
+          format: int64
+          example: 12
+        is_reserved:
+          type: boolean
+          example: true
+    Order:
+      type: object
+      properties: 
+        user_ID:
+          type: integer
+          format: int64
+          example: 48751
+        good_ID:
+          type: integer
+          format: int64
+          example: 5
+  securitySchemes:
+    user_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:users: buy goods
+            read:users: read goods
+    admin_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:users: modify all
+            read:users: read all
