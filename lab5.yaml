@@ -2,23 +2,22 @@ openapi: 3.0.3
 info:
   title: "Online Shop API"
   description: "Lab 5"
-  version: 1100.1223.34
+  version: 0.0.1
   
 servers:
   - url: http://localhost:8000/api/
 tags:
-  - name: users
+  - name: user
   - name: order
-  - name: goods
-
-
-
-  
+  - name: good
+  - name: good_category
+  - name: vendor
+  - name: delivery
 paths:
   /user:
     post:
       tags:
-        - users
+        - user
       summary: Create user
       
       operationId: createUser
@@ -40,13 +39,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getUser'
+                $ref: '#/components/schemas/GetUser'
             application/xml:
               schema:
-                $ref: '#/components/schemas/getUser'
+                $ref: '#/components/schemas/GetUser'
     get:
       tags:
-        - users
+        - user
       summary: Get all users
       
       operationId: getUser
@@ -56,10 +55,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getUser'
+                $ref: '#/components/schemas/GetUser'
             application/xml:
               schema:
-                $ref: '#/components/schemas/getUser'
+                $ref: '#/components/schemas/GetUser'
       security:
         - admin_auth:
           - write:users
@@ -67,7 +66,7 @@ paths:
   /user/login:
     get:
       tags:
-        - users
+        - user
       summary: Logs user into the system
       operationId: loginUser
       parameters:
@@ -101,7 +100,7 @@ paths:
   /user/{id}:
     get:
       tags:
-        - users
+        - user
       summary: Get user by id
       operationId: getUserById
       parameters:
@@ -117,10 +116,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/getUser'          
+                $ref: '#/components/schemas/GetUser'          
             application/xml:
               schema:
-                $ref: '#/components/schemas/getUser'
+                $ref: '#/components/schemas/GetUser'
         '400':
           description: Invalid username supplied
         '404':
@@ -129,14 +128,82 @@ paths:
         - admin_auth:
           - write:users
           - read:users
+        - user_auth:
+          - write:users
+          - read:users
+    put:
+      tags:
+        - user
+      summary: Update user info
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+      security:
+        - user_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+        - user_auth:
+          - write:users
+          - read:users   
   /good:
     get:
       tags:
-        - goods
+        - good
       summary: get all goods
-      
       operationId: getGood
-      
       responses:
         '200':
           description: ' '
@@ -149,980 +216,647 @@ paths:
                 $ref: '#/components/schemas/GetGood'
         '400':
           description: No goods in the shop
-
-  /good/1st_good:
     post:
       tags:
-        - goods
-      summary: add 1st good
-      operationId: postGood1
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_name
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: good_price
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_amount
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    get:
-      tags:
-        - goods
+        - good
+      summary: Create good
       
-      operationId: getGood1
+      operationId: goodCreate
+      requestBody:
+        description: Created good object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Good'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Good'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Good'
       responses:
-        '200':
-          description: ' '
+        'default':
+          description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Good'
+                $ref: '#/components/schemas/GetGood'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Good'
-    put:
-      tags:
-        - goods
-      summary: update 1st good
-      operationId: putGood1
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    delete:
-      tags:
-        - goods
-      summary: delete 1st good
-      operationId: deleteGood1
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '204':
-          description: Good was deleted.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-  /good/2st_good:
-    post:
-      tags:
-        - goods
-      summary: add 2nd good
-      operationId: postGood2
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_name
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: good_price
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_amount
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
+                $ref: '#/components/schemas/GetGood'
+  /good/{id}:
     get:
       tags:
-        - goods
-      
-      operationId: getGood2
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '403':
-          description: This good is reserved by another customer
-        '402':
-          description: This good is sold out
-    put:
-      tags:
-        - goods
-      summary: update 2nd good
-      operationId: putGood2
+        - good
+      summary: Get good by id
+      operationId: getGoodById
       parameters:
-        - name: good_id
-          in: query
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
           required: true
           schema:
             type: integer
       responses:
         '200':
-          description: ' '
+          description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Good'
+                $ref: '#/components/schemas/GetUser'          
             application/xml:
               schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
+                $ref: '#/components/schemas/GetUser'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+        - user_auth:
+          - write:users
+          - read:users
+    put:
+      tags:
+        - good
+      summary: Update good info
+      operationId: updateGood
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update good object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetGood'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetGood'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetGood'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGood'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetGood'
       security:
         - admin_auth:
           - write:users
           - read:users
     delete:
       tags:
-        - goods
-      summary: delete 2nd good
-      operationId: deleteGood2
+        - good
+      summary: Delete good
+      operationId: deleteGood
       parameters:
-        - name: good_id
-          in: query
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
           required: true
           schema:
             type: integer
       responses:
-        '200':
-          description: ' '
+        'default':
+          description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Good'
+                $ref: '#/components/schemas/GetGood'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Good'
-        '204':
-          description: Good was deleted.
+                $ref: '#/components/schemas/GetGood'
       security:
         - admin_auth:
           - write:users
           - read:users
-  /good/3rd_good:
-    post:
-      tags:
-        - goods
-      summary: add 3rd good
-      operationId: postGood3
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_name
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: good_price
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_amount
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
+  /order/{user_id}:
     get:
       tags:
-        - goods
-      
-      operationId: getGood3
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '403':
-          description: This good is reserved by another customer
-        '402':
-          description: This good is sold out
-    put:
-      tags:
-        - goods
-      summary: update 3rd good
-      operationId: putGood3
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    delete:
-      tags:
-        - goods
-      summary: delete 3rd good
-      operationId: deleteGood3
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '204':
-          description: Good was deleted.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-  /good/4th_good:
-    post:
-      tags:
-        - goods
-      summary: add 4th good
-      operationId: postGood4
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_name
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: good_price
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_amount
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    get:
-      tags:
-        - goods
-      
-      operationId: getGood4
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '403':
-          description: This good is reserved by another customer
-        '402':
-          description: This good is sold out
-    put:
-      tags:
-        - goods
-      summary: update 4th good
-      operationId: putGood4
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    delete:
-      tags:
-        - goods
-      summary: delete 4th good
-      operationId: deleteGood4
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '204':
-          description: Good was deleted.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-  /good/5th_good:
-    post:
-      tags:
-        - goods
-      summary: add 5th good
-      operationId: postGood5
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_name
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: good_price
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_amount
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    get:
-      tags:
-        - goods
-      
-      operationId: getGood5
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '403':
-          description: This good is reserved by another customer
-        '402':
-          description: This good is sold out
-    put:
-      tags:
-        - goods
-      summary: update 5th good
-      operationId: putGood5
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    delete:
-      tags:
-        - goods
-      summary: delete 5th good
-      operationId: deleteGood5
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '204':
-          description: Good was deleted.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-  /good/6th_good:
-    post:
-      tags:
-        - goods
-      summary: add 6th good
-      operationId: postGood6
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_name
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: good_price
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_amount
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    get:
-      tags:
-        - goods
-     
-      operationId: getGood6
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '403':
-          description: This good is reserved by another customer
-        '402':
-          description: This good is sold out
-    put:
-      tags:
-        - goods
-      summary: update 6th good
-      operationId: putGood6
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    delete:
-      tags:
-        - goods
-      summary: delete 6th good
-      operationId: deleteGood6
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '204':
-          description: Good was deleted.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-  /good/7th_good:
-    post:
-      tags:
-        - goods
-      summary: add 7th good
-      operationId: postGood7
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_name
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: good_price
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_amount
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    get:
-      tags:
-        - goods
-      
-      operationId: getGood7
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '403':
-          description: This good is reserved by another customer
-        '402':
-          description: This good is sold out
-    put:
-      tags:
-        - goods
-      summary: update 7th good
-      operationId: putGood7
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    delete:
-      tags:
-        - goods
-      summary: delete 7th good
-      operationId: deleteGood7
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '204':
-          description: Good was deleted.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-  /good/8th_good:
-    post:
-      tags:
-        - goods
-      summary: add 8th good
-      operationId: postGood8
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_name
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: good_price
-          in: query
-          required: true
-          schema:
-            type: integer
-        - name: good_amount
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    get:
-      tags:
-        - goods
-      
-      operationId: getGood8
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '403':
-          description: This good is reserved by another customer
-        '402':
-          description: This good is sold out
-    put:
-      tags:
-        - goods
-      summary: update 8th good
-      operationId: putGood8
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '401':
-          description: Authorization information is missing or invalid.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-    delete:
-      tags:
-        - goods
-      summary: delete 8th good
-      operationId: deleteGood8
-      parameters:
-        - name: good_id
-          in: query
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: ' '
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Good'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Good'
-        '204':
-          description: Good was deleted.
-      security:
-        - admin_auth:
-          - write:users
-          - read:users
-          
-  /good/order:
-    post:
-      tags:
-        
         - order
-        
-      
-      summary: buy a good
-      operationId: buyGood
+      summary: Get all user orders
+      operationId: getOrders
+      parameters:
+        - name: user_id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
       responses:
-        '200':
-          description: ' '
+        'default':
+          description: successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/GetOrder'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Order'
-        '403':
-          description: This good is reserved by another customer
-        '402':
-          description: This good is sold out or doesn`t exist
-        '401':
-          description: Unathorised user
+                $ref: '#/components/schemas/GetOrder'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+        - user_auth:
+          - write:users
+          - read:users
+    post:
+      tags:
+        - order
+      summary: Create order
+      operationId: createOrder
+      parameters:
+        - name: user_id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Created order object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetOrder'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetOrder'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetOrder'
       security:
         - user_auth:
           - write:users
           - read:users
-    delete:
+  /order/{user_id}/{id}:
+    get:
       tags:
         - order
-      summary: order is complete
-      
+      summary: Get some user order
+      operationId: getOrder
+      parameters:
+        - name: user_id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetOrder'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+        - user_auth:
+          - write:users
+          - read:users
+  /good_category:
+    get:
+      tags:
+        - good_category
+      summary: get all goods
+      operationId: getCategory
       responses:
         '200':
           description: ' '
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/GetGood_category'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Order'
+                $ref: '#/components/schemas/GetGood_category'
+        '400':
+          description: No goods in the shop
+    post:
+      tags:
+        - good_category
+      summary: Create good category
+      
+      operationId: createCategory
+      requestBody:
+        description: Created category object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Good_category'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Good_category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Good_category'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGood_category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetGood_category'
+  /good_category/{id}:
+    get:
+      tags:
+        - good_category
+      summary: Get category by id
+      operationId: getGoodCategoryById
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGood_category'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetGood_category'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - good_category
+      summary: Update category info
+      operationId: updateCategory
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update good object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetGood_category'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetGood_category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetGood_category'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGood_category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetGood_category'
       security:
         - admin_auth:
           - write:users
           - read:users
+    delete:
+      tags:
+        - good_category
+      summary: Delete category
+      operationId: deleteCategory
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetGood_category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetGood_category'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users    
+  /vendor:
+    get:
+      tags:
+        - vendor
+      summary: get all vendors
+      operationId: getVendor
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVendor'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetVendor'
+        '400':
+          description: No goods in the shop
+    post:
+      tags:
+        - vendor
+      summary: Create vendor
+      
+      operationId: vendorCreate
+      requestBody:
+        description: Created vendor object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Vendor'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Vendor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Vendor'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVendor'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetVendor'
+  /vendor/{id}:
+    get:
+      tags:
+        - vendor
+      summary: Get vendor by id
+      operationId: getVendorId
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVendor'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetVendor'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - vendor
+      summary: Update vendor info
+      operationId: updateVendor
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update vendor object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetVendor'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetVendor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetVendor'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVendor'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetVendor'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - vendor
+      summary: Delete vendor
+      operationId: DeleteVendorId
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVendor'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetVendor'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users    
+          
+  /delivery:
+    get:
+      tags:
+        - delivery
+      summary: get all deliverys
+      operationId: getDelivery
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'
+        '400':
+          description: No goods in the shop
+    post:
+      tags:
+        - delivery
+      summary: Create delivery
+      operationId: deliveryCreate
+      requestBody:
+        description: Created delivery object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Delivery'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Delivery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Delivery'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'
+  /delivery/{id}:
+    get:
+      tags:
+        - delivery
+      summary: Get delivery by id
+      operationId: getDeliveryId
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - delivery
+      summary: Update delivery info
+      operationId: updateDelivery
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update delivery object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetDelivery'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/GetDelivery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GetDelivery'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - delivery
+      summary: Delete delivery
+      operationId: DeleteDeliveryId
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetDelivery'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users    
 components:
   schemas:
     User:
@@ -1138,9 +872,6 @@ components:
         last_name:
           type: string
           example: Semenenko
-        username:
-          type: string
-          example: user12345
         login:
           type: string
           example: nulp572
@@ -1148,51 +879,85 @@ components:
           type: string
           format: password
           example: asdasdadsd
-        
+        email:
+          type: string
+          example: testemail@localhost
+        address:
+          type: string
+          example: Lviv, Symonenka73
+        is_admin:
+          type: integer
+          format: bool
+          example: 0
+  
       xml:
         name: users
-        
-    Admin:
+    GetUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Stas
+        last_name:
+          type: string
+          example: Semenenko
+        login:
+          type: string
+          example: nulp572
+        password:
+          type: string
+          format: password
+          example: asdasdadsd
+        email:
+          type: string
+          example: testemail@localhost
+        address:
+          type: string
+          example: Lviv, Symonenka73
+        is_admin:
+          type: integer
+          format: bool
+          example: 0
+      xml:
+        name: users
+    Vendor:
       type: object
       properties:
         id:
           type: integer
           format: int64
-          example: 14379
-        first_name:
+          example: 48751
+        company_name:
           type: string
-          example: Stas
-        last_name:
+          example: Product store
+        location:
           type: string
-          example: Semenenko
-        username:
-          type: string
-          example: user12345
-        login:
-          type: string
-          example: nulp572
-        password:
-          type: string
-          format: password
-          example: asdasdadsd
-        
-      xml:
-        name: users
-    getUser:
+          example: Kyiv, Shevchenka22
+    GetVendor:
       type: object
       properties:
-        first_name:
+        company_name:
           type: string
-          example: Stas
-        last_name:
+          example: Product store
+        location:
           type: string
-          example: Semenenko
-        username:
+          example: Kyiv, Shevchenka22
+    Good_category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 48751
+        category_name:
           type: string
-          example: user12345
-        
-      xml:
-        name: users
+          example: test category
+    GetGood_category:
+      type: object
+      properties:
+        category_name:
+          type: string
+          example: test category
     Good:
       type: object
       properties:
@@ -1200,10 +965,19 @@ components:
           type: integer
           format: int64
           example: 48751
+        vendor_id: 
+          type: integer
+          $ref: '#/components/schemas/Vendor'
+        category_id:
+          type: integer
+          $ref: '#/components/schemas/Good_category'
         name:
           type: string
           example: some good
-        price:
+        description:
+          type: string
+          example: some descrtiption
+        cost:
           type: integer
           format: int64
           example: 48751
@@ -1211,6 +985,9 @@ components:
           type: integer
           format: int64
           example: 12
+        creation_date:
+          type: string
+          format: datetime
         is_reserved:
           type: boolean
           example: true
@@ -1234,14 +1011,69 @@ components:
     Order:
       type: object
       properties: 
+        id:
+          type: integer
+          format: int64
+          example: 634
+          
         user_ID:
           type: integer
           format: int64
-          example: 48751
+          $ref: '#/components/schemas/User'
+          
         good_ID:
           type: integer
           format: int64
-          example: 5
+          $ref: '#/components/schemas/Good'
+          
+        buy_date:
+          type: string
+          format: datetime
+    GetOrder:
+      type: object
+      properties: 
+        user_ID:
+          type: integer
+          format: int64
+          $ref: '#/components/schemas/User'
+          
+        good_ID:
+          type: integer
+          format: int64
+          $ref: '#/components/schemas/Good'
+        buy_date:
+          type: string
+          format: datetime
+    Delivery:
+      type: object
+      properties: 
+        id:
+          type: integer
+          format: int64
+          example: 634
+        order_id:
+          type: integer
+          $ref: '#/components/schemas/Order'
+        type:
+          type: string
+          enum: ['self pickup', 'courier']
+        from_:
+          type: string
+        to:
+          type: string
+    GetDelivery:
+      type: object
+      properties: 
+        order_id:
+          type: integer
+          $ref: '#/components/schemas/Order'
+        type:
+          type: string
+          enum: ['self pickup', 'courier']
+        from_:
+          type: string
+        to:
+          type: string
   securitySchemes:
     user_auth:
       type: oauth2
