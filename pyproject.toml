@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "pp"
+version = "0.1.0"
+description = ""
+authors = ["Maxim Orlianskyi <orlianskyimaxim@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+sqlalchemy-cockroachdb = "^1.4.4"
+SQLAlchemy = "^1.4.42"
+flask-sqlalchemy = "^3.0.2"
+Flask = "^2.2.2"
+alembic = "^1.8.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

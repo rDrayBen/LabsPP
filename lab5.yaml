@@ -248,7 +248,7 @@ paths:
     get:
       tags:
         - good
-      summary: Get good by id
+      summary: Get user by id
       operationId: getGoodById
       parameters:
         - name: id
