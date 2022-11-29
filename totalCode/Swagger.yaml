@@ -1,0 +1,1249 @@
+openapi: 3.0.3
+info:
+  title: "Online Shop API"
+  description: "Lab 5"
+  version: 0.0.1
+  
+servers:
+  - url: http://localhost:8000/api/
+tags:
+  - name: user
+  - name: order
+  - name: good
+  - name: good_category
+  - name: vendor
+  - name: delivery
+paths:
+  /user:
+    post:
+      tags:
+        - user
+      summary: Create user
+      
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+    get:
+      tags:
+        - user
+      summary: Get all users
+      
+      operationId: getUser
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /user/login:
+    get:
+      tags:
+        - user
+      summary: Logs user into the system
+      operationId: loginUser
+      parameters:
+        - name: login
+          in: query
+          description: The login to sing in
+          required: true
+          schema:
+            type: string
+        - name: password
+          in: query
+          description: The password to sign in
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+            application/xml:
+              schema:
+                type: string
+            
+        '400':
+          description: Invalid username/password supplied
+        '404':
+          description: No page found
+  /user/{id}:
+    get:
+      tags:
+        - user
+      summary: Get user by id
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUser'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    put:
+      tags:
+        - user
+      summary: Update user info
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+      security:
+        - user_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - user
+      summary: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+        - user_auth:
+          - write:users
+          - read:users   
+  /good:
+    get:
+      tags:
+        - good
+      summary: get all goods
+      operationId: getGood
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetGood'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetGood'
+        '400':
+          description: No goods in the shop
+    post:
+      tags:
+        - good
+      summary: Create good
+      
+      operationId: goodCreate
+      requestBody:
+        description: Created good object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGetGood'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateGetGood'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGetGood'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetGood'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetGood'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good/{id}:
+    get:
+      tags:
+        - good
+      summary: Get user by id
+      operationId: getGoodById
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUser'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/GetUser'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - good
+      summary: Update good info
+      operationId: updateGood
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update good object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateGood'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UpdateGood'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateGood'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetGood'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetGood'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - good
+      summary: Delete good
+      operationId: deleteGood
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetGood'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetGood'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /order/{user_id}:
+    get:
+      tags:
+        - order
+      summary: Get all user orders
+      operationId: getOrders
+      parameters:
+        - name: user_id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetOrder'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+        - user_auth:
+          - write:users
+          - read:users
+    post:
+      tags:
+        - order
+      summary: Create order
+      operationId: createOrder
+      parameters:
+        - name: user_id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Created order object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGetOrder'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateGetOrder'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGetOrder'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetOrder'
+      security:
+        - user_auth:
+          - write:users
+          - read:users
+    
+  /order/{user_id}/{id}:
+    get:
+      tags:
+        - order
+      summary: Get some user order
+      operationId: getOrder
+      parameters:
+        - name: user_id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetOrder'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+        - user_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - order
+      summary: Delete order
+      operationId: deleteOrder
+      parameters:
+        - name: user_id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetOrder'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetOrder'
+      security:
+        - user_auth:
+          - write:users
+          - read:users
+      
+  /good_category:
+    get:
+      tags:
+        - good_category
+      summary: get all goods
+      operationId: getCategory
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'
+        '400':
+          description: No goods in the shop
+    post:
+      tags:
+        - good_category
+      summary: Create good category
+      
+      operationId: createCategory
+      requestBody:
+        description: Created category object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateGood_category'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateGood_category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateGood_category'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+  /good_category/{id}:
+    get:
+      tags:
+        - good_category
+      summary: Get category by id
+      operationId: getGoodCategoryById
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+    put:
+      tags:
+        - good_category
+      summary: Update category info
+      operationId: updateCategory
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update good object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateGood_category'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateGood_category'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateGood_category'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - good_category
+      summary: Delete category
+      operationId: deleteCategory
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateGood_category'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users    
+  /vendor:
+    get:
+      tags:
+        - vendor
+      summary: get all vendors
+      operationId: getVendor
+      responses:
+        '200':
+          description: ' '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'
+        '400':
+          description: No goods in the shop
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    post:
+      tags:
+        - vendor
+      summary: Create vendor
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+      
+      operationId: vendorCreate
+      requestBody:
+        description: Created vendor object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateVendor'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateVendor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateVendor'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'
+  /vendor/{id}:
+    get:
+      tags:
+        - vendor
+      summary: Get vendor by id
+      operationId: getVendorId
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    put:
+      tags:
+        - vendor
+      summary: Update vendor info
+      operationId: updateVendor
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Update vendor object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateVendor'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateVendor'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGetUpdateVendor'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users
+    delete:
+      tags:
+        - vendor
+      summary: Delete vendor
+      operationId: DeleteVendorId
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetUpdateVendor'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users    
+          
+  /delivery:
+    # get:
+    #   tags:
+    #     - delivery
+    #   summary: get all deliverys
+    #   operationId: getDelivery
+    #   responses:
+    #     '200':
+    #       description: ' '
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/CreateGetDelivery'
+    #         application/xml:
+    #           schema:
+    #             $ref: '#/components/schemas/CreateGetDelivery'
+    #     '400':
+    #       description: No goods in the shop
+    #   security:
+    #     - user_auth:
+    #       - write:users
+    #       - read:users
+    post:
+      tags:
+        - delivery
+      summary: Create delivery
+      operationId: deliveryCreate
+      requestBody:
+        description: Created delivery object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateGetDelivery'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/CreateGetDelivery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateGetDelivery'
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetDelivery'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetDelivery'
+      security:
+        - user_auth:
+          - write:users
+          - read:users
+  /delivery/{id}:
+    get:
+      tags:
+        - delivery
+      summary: Get delivery by id
+      operationId: getDeliveryId
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetDelivery'          
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetDelivery'
+        '400':
+          description: Invalid username supplied
+        '404':
+          description: User not found
+      security:
+        - user_auth:
+          - write:users
+          - read:users
+    # put:
+    #   tags:
+    #     - delivery
+    #   summary: Update delivery info
+    #   operationId: updateDelivery
+    #   parameters:
+    #     - name: id
+    #       in: path
+    #       description: 'The id that needs to be fetched.'
+    #       required: true
+    #       schema:
+    #         type: integer
+    #   requestBody:
+    #     description: Update delivery object
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: '#/components/schemas/CreateGetDelivery'
+    #       application/xml:
+    #         schema:
+    #           $ref: '#/components/schemas/CreateGetDelivery'
+    #       application/x-www-form-urlencoded:
+    #         schema:
+    #           $ref: '#/components/schemas/CreateGetDelivery'
+    #   responses:
+    #     'default':
+    #       description: successful operation
+    #       content:
+    #         application/json:
+    #           schema:
+    #             $ref: '#/components/schemas/CreateGetDelivery'
+    #         application/xml:
+    #           schema:
+    #             $ref: '#/components/schemas/CreateGetDelivery'
+    #   security:
+    #     - admin_auth:
+    #       - write:users
+    #       - read:users
+    delete:
+      tags:
+        - delivery
+      summary: Delete delivery
+      operationId: DeleteDeliveryId
+      parameters:
+        - name: id
+          in: path
+          description: 'The id that needs to be fetched.'
+          required: true
+          schema:
+            type: integer
+      responses:
+        'default':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateGetDelivery'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/CreateGetDelivery'
+      security:
+        - admin_auth:
+          - write:users
+          - read:users    
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 14379
+        first_name:
+          type: string
+          example: Stas
+        last_name:
+          type: string
+          example: Semenenko
+        login:
+          type: string
+          example: nulp572
+        password:
+          type: string
+          format: password
+          example: asdasdadsd
+        phone:
+          type: string
+          example: +380449842842
+        email:
+          type: string
+          example: testemail@localhost
+        address:
+          type: string
+          example: Lviv, Symonenka73
+        is_admin:
+          type: integer
+          format: bool
+          example: 0
+      xml:
+        name: users
+    CreateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Stas
+        last_name:
+          type: string
+          example: Semenenko
+        login:
+          type: string
+          example: nulp572
+        password:
+          type: string
+          format: password
+          example: asdasdadsd
+        email:
+          type: string
+          example: testemail@localhost
+        address:
+          type: string
+          example: Lviv, Symonenka73
+        phone:
+          type: string
+          example: +380449842842
+      xml:
+        name: users
+    GetUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Stas
+        last_name:
+          type: string
+          example: Semenenko
+        login:
+          type: string
+          example: nulp572
+        email:
+          type: string
+          example: testemail@localhost
+        address:
+          type: string
+          example: Lviv, Symonenka73
+        phone:
+          type: string
+          example: +380449842842
+      xml:
+        name: users
+    UpdateUser:
+      type: object
+      properties:
+        first_name:
+          type: string
+          example: Stas
+        last_name:
+          type: string
+          example: Semenenko
+        login:
+          type: string
+          example: nulp572
+        password:
+          type: string
+          format: password
+          example: asdasdadsd
+        email:
+          type: string
+          example: testemail@localhost
+        address:
+          type: string
+          example: Lviv, Symonenka73
+        phone:
+          type: string
+          example: +380449842842
+      xml:
+        name: users
+    Vendor:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 48751
+        company_name:
+          type: string
+          example: Product store
+        location:
+          type: string
+          example: Kyiv, Shevchenka22
+    CreateGetUpdateVendor:
+      type: object
+      properties:
+        company_name:
+          type: string
+          example: Product store
+        location:
+          type: string
+          example: Kyiv, Shevchenka22
+    # GetVendor:
+    #   type: object
+    #   properties:
+    #     company_name:
+    #       type: string
+    #       example: Product store
+    #     location:
+    #       type: string
+    #       example: Kyiv, Shevchenka22
+    Good_category:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 48751
+        category_name:
+          type: string
+          example: test category
+    CreateGetUpdateGood_category:
+      type: object
+      properties:
+        category_name:
+          type: string
+          example: test category
+    Good:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 48751
+        vendor_id: 
+          type: integer
+          $ref: '#/components/schemas/Vendor'
+        category_id:
+          type: integer
+          $ref: '#/components/schemas/Good_category'
+        name:
+          type: string
+          example: some good
+        description:
+          type: string
+          example: some descrtiption
+        cost:
+          type: integer
+          format: int64
+          example: 48751
+        num_in_stock:
+          type: integer
+          format: int64
+          example: 12
+        creation_date:
+          type: string
+          format: datetime
+        is_reserved:
+          type: boolean
+          example: true
+    CreateGetGood:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 48751
+        vendor_id: 
+          type: integer
+          $ref: '#/components/schemas/Vendor'
+        category_id:
+          type: integer
+          $ref: '#/components/schemas/Good_category'
+        name:
+          type: string
+          example: some good
+        description:
+          type: string
+          example: some descrtiption
+        cost:
+          type: integer
+          format: int64
+          example: 48751
+        num_in_stock:
+          type: integer
+          format: int64
+          example: 12
+        creation_date:
+          type: string
+          format: datetime
+        is_reserved:
+          type: boolean
+          example: true
+    UpdateGood:
+      type: object
+      properties:
+        name:
+          type: string
+          example: some good
+        description:
+          type: string
+          example: some descrtiption
+        cost:
+          type: integer
+          format: int64
+          example: 48751
+        num_in_stock:
+          type: integer
+          format: int64
+          example: 12
+        creation_date:
+          type: string
+          format: datetime
+        is_reserved:
+          type: boolean
+          example: true
+    Order:
+      type: object
+      properties: 
+        id:
+          type: integer
+          format: int64
+          example: 634
+          
+        user_ID:
+          type: integer
+          format: int64
+          $ref: '#/components/schemas/User'
+          
+        good_ID:
+          type: integer
+          format: int64
+          $ref: '#/components/schemas/Good'
+          
+        buy_date:
+          type: string
+          format: datetime
+    CreateGetOrder:
+      type: object
+      properties: 
+        user_ID:
+          type: integer
+          format: int64
+          $ref: '#/components/schemas/User'
+        good_ID:
+          type: integer
+          format: int64
+          $ref: '#/components/schemas/Good'
+        buy_date:
+          type: string
+          format: datetime
+    UpdateOrder:
+      type: object
+      properties: 
+        buy_date:
+          type: string
+          format: datetime
+    Delivery:
+      type: object
+      properties: 
+        id:
+          type: integer
+          format: int64
+          example: 634
+        order_id:
+          type: integer
+          $ref: '#/components/schemas/Order'
+        type:
+          type: string
+          enum: ['self pickup', 'courier']
+        to:
+          type: integer
+    CreateGetDelivery:
+      type: object
+      properties: 
+        order_id:
+          type: integer
+          $ref: '#/components/schemas/Order'
+        type:
+          type: string
+          enum: ['self pickup', 'courier']
+        to:
+          type: integer
+  securitySchemes:
+    user_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:users: buy goods
+            read:users: read goods
+    admin_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://petstore3.swagger.io/oauth/authorize
+          scopes:
+            write:users: modify all
+            read:users: read all
