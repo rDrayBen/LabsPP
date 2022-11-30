@@ -30,7 +30,6 @@ class CreateUser(Schema):
     address = fields.String(required=True)
     phone = fields.String(validate=validate.Regexp('^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[\s0-9]{4,20}$', error="Invalid phone"), required=True)
 
-
 class GetUser(Schema):
     first_name = fields.String()
     last_name = fields.String()
