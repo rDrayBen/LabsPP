@@ -662,6 +662,8 @@ def getDeliveryById(delivery_id):
     if current_identity_login == user.login or user.is_admin == 1:
         #delivery = db_utils.get_entry_for_delivery(user.id, delivery_id)
         delivery = db_utils.get_entry_by_id(Delivery, delivery_id)
+        if delivery.to != user.id:
+            return make_response(jsonify("Access denied"), 403)
         if delivery == 405:
             response = make_response("Invalid input id")
             response.status_code = 405
@@ -702,15 +704,3 @@ def deleteDelivery(delivery_id):
     return make_response(jsonify("Access denied"), 403)
     #delete delivery by id
 
-
-"""
-{
-  "first_name": "Stas",
-  "last_name": "Semenenko",
-  "login": "nulp572",
-  "phone": "0900256731",
-  "password": "asdasdadsd",
-  "email": "testemail@localhost",
-  "address": "Lviv, Symonenka73",
-}
-"""
