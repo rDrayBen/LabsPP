@@ -3,14 +3,16 @@ import datetime
 import sqlalchemy.orm
 import MySQLdb
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import *
+from sqlalchemy.ext.declarative import declarative_base
 import alembic
 
 sql_engine = create_engine('mysql://root:1234@localhost:3306/online_store', echo=False)
-
-Session = sessionmaker(bind=sql_engine)
-session = Session()
+# Session = sessionmaker(bind=sql_engine)
+# session = Session()
+SessionFactory = sessionmaker(bind=sql_engine)
+Session = scoped_session(SessionFactory)
 Base = declarative_base()
 metadata = Base.metadata
 class User(Base):
