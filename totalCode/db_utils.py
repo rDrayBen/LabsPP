@@ -1,4 +1,4 @@
-from models import Session, User, Delivery
+from FullCourceProject.models import Session, User, Delivery
 
 
 def create_entry(model_class, *, commit=True, **kwargs):
@@ -11,9 +11,10 @@ def create_entry(model_class, *, commit=True, **kwargs):
         return 400
     return session.query(model_class).filter_by(**kwargs).one()
 
+
 def create_user(model_class, phn, eml, lgn, *, commit=True, **kwargs):
-    session=Session()
-    if session.query(model_class).filter_by(phone=phn).all() != [] :
+    session = Session()
+    if session.query(model_class).filter_by(phone=phn).all() != []:
         return 406
     elif session.query(model_class).filter_by(email=eml).all() != []:
         return 407
@@ -27,8 +28,9 @@ def create_user(model_class, phn, eml, lgn, *, commit=True, **kwargs):
         return 400
     return session.query(model_class).filter_by(**kwargs).one()
 
+
 def create_category(model_class, nm, *, commit=True, **kwargs):
-    session=Session()
+    session = Session()
     if session.query(model_class).filter_by(category_name=nm).all() != []:
         return 405
     entry = model_class(**kwargs)
@@ -38,6 +40,7 @@ def create_category(model_class, nm, *, commit=True, **kwargs):
     if not session.query(model_class).filter_by(**kwargs).one():
         return 400
     return session.query(model_class).filter_by(**kwargs).one()
+
 
 def create_vendor(model_class, nm, *, commit=True, **kwargs):
     session = Session()
@@ -50,6 +53,7 @@ def create_vendor(model_class, nm, *, commit=True, **kwargs):
     if not session.query(model_class).filter_by(**kwargs).one():
         return 400
     return session.query(model_class).filter_by(**kwargs).one()
+
 
 def get_entry_by_id(model_class, input_id, **kwargs):
     session = Session()
@@ -75,7 +79,7 @@ def update_entry(entry, *, commit=True, **kwargs):
 
 
 def update_user(entry, *, commit=True, **kwargs):
-    session=Session()
+    session = Session()
     for key, value in kwargs.items():
         if key == 'phone':
             if check_entry_for_user(phn=value, eml="notvalidgmail", lgn="notlogin") != 200:
@@ -91,13 +95,14 @@ def update_user(entry, *, commit=True, **kwargs):
         session.commit()
     return entry
 
+
 def get_entry(model_class):
     session = Session()
     return session.query(model_class).all()
 
 
 def get_entry_by_second_id(model_class, second_id, field_name):
-    session=Session()
+    session = Session()
     if field_name == 'order':
         return session.query(model_class).filter_by(user_id=second_id).all()
     elif field_name == 'delivery':
